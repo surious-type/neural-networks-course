@@ -27,8 +27,23 @@ def get_data(seed=42):
 
 def make_config(config):
     layers, loss, func, optimizer_class, epochs, batch_size = config
+
+    if isinstance(layers, tuple):
+        model_params = {
+            "input_size": 1,
+            "one": layers[0],
+            "two": layers[1],
+            "out": 1,
+        }
+    else:
+        model_params = {
+            "input_size": 1,
+            "one": layers,
+            "out": 1,
+        }
+
     return {
-        "model_params": str({"input_size": 1, "one": layers, "out": 1}),
+        "model_params": str(model_params),
         "model_loss": loss.__class__.__name__,
         "func": func.__name__,
         "optimizer_class": optimizer_class,

@@ -9,17 +9,12 @@ from torch import nn, optim
 from train import run
 
 lr = 0.001
-epochs = [200]
-batch_sizes = [32, 64, 128, 256, 512]
-
-funcs = [nn.ReLU, nn.Sigmoid, nn.Tanh, nn.ELU, nn.LeakyReLU, nn.SiLU, nn.Mish]
-model_losses = [nn.MSELoss(), nn.L1Loss()]
 optimizers = {
-    "Momentum": lambda params: optim.SGD(params, lr=lr, momentum=0.9),
-    "Nesterov": lambda params: optim.SGD(params, lr=lr, momentum=0.9, nesterov=True),
-    "Adagrad": lambda params: optim.Adagrad(params, lr=lr),
+    # "Momentum": lambda params: optim.SGD(params, lr=lr, momentum=0.9),
+    # "Nesterov": lambda params: optim.SGD(params, lr=lr, momentum=0.9, nesterov=True),
+    # "Adagrad": lambda params: optim.Adagrad(params, lr=lr),
     "RMSprop": lambda params: optim.RMSprop(params, lr=lr),
-    "Adadelta": lambda params: optim.Adadelta(params, lr=lr),
+    # "Adadelta": lambda params: optim.Adadelta(params, lr=lr),
     "Adam": lambda params: optim.Adam(params, lr=lr),
 }
 
@@ -57,24 +52,44 @@ def relax(config):
 
 
 if __name__ == "__main__":
-    store = Store("test_results.csv")
+    store = Store("results_MLP3.csv")
 
-    configurations = product(
-        range(10, 200, 10),
-        model_losses,
-        funcs,
-        optimizers.keys(),
-        epochs,
-        batch_sizes,
-    )
+    epochs = [200]
+    batch_sizes = [
+        32,
+        64,
+        128,
+        # 256,
+        # 512,
+    ]
+
+    funcs = [
+        # nn.ReLU,
+        # nn.Sigmoid,
+        # nn.Tanh,
+        # nn.ELU,
+        nn.LeakyReLU,
+        nn.SiLU,
+        nn.Mish,
+    ]
+    model_losses = [nn.MSELoss(), nn.L1Loss()]
+
     # configurations = product(
-    #     ((i, j) for i in range(10, 200, 10) for j in range(10, 200, 10)),
+    #     range(10, 200, 10),
     #     model_losses,
     #     funcs,
     #     optimizers.keys(),
     #     epochs,
     #     batch_sizes,
     # )
+    configurations = product(
+        ((i, j) for i in range(10, 190, 10) for j in range(10, 200 - i, 10)),
+        model_losses,
+        funcs,
+        optimizers.keys(),
+        epochs,
+        batch_sizes,
+    )
 
     configurations = (
         config for config in configurations if not store.exists(make_config(config))
