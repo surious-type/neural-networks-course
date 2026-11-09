@@ -4,18 +4,18 @@ from pathlib import Path
 
 import torch
 
-torch.manual_seed(42)
-
 
 # Data Generation
-def get_data():
+def get_data(seed=42):
+    generator = torch.Generator().manual_seed(seed)
+
     n_samples = 10000
     n_train = 8000
 
-    x = (1e-15 + (1 - 1e-15) * torch.rand(n_samples)).unsqueeze(1)
+    x = (1e-15 + (1 - 1e-15) * torch.rand(n_samples, generator=generator)).unsqueeze(1)
     y = x**2
 
-    idx = torch.randperm(n_samples)
+    idx = torch.randperm(n_samples, generator=generator)
     train_idx = idx[:n_train]
     val_idx = idx[n_train:]
 
@@ -48,7 +48,7 @@ class Store:
     ]
 
     METRICS = [
-        "mse",
+        "loss",
         "mape",
     ]
 
