@@ -13,7 +13,7 @@ optimizers = {
     # "Momentum": lambda params: optim.SGD(params, lr=lr, momentum=0.9),
     # "Nesterov": lambda params: optim.SGD(params, lr=lr, momentum=0.9, nesterov=True),
     # "Adagrad": lambda params: optim.Adagrad(params, lr=lr),
-    "RMSprop": lambda params: optim.RMSprop(params, lr=lr),
+    # "RMSprop": lambda params: optim.RMSprop(params, lr=lr),
     # "Adadelta": lambda params: optim.Adadelta(params, lr=lr),
     "Adam": lambda params: optim.Adam(params, lr=lr),
 }
@@ -52,9 +52,9 @@ def relax(config):
 
 
 if __name__ == "__main__":
-    store = Store("results_MLP3.csv")
+    store = Store("results_MLP3_Adam.csv")
 
-    epochs = [200]
+    epochs = [1000]
     batch_sizes = [
         32,
         64,
@@ -68,7 +68,7 @@ if __name__ == "__main__":
         # nn.Sigmoid,
         # nn.Tanh,
         # nn.ELU,
-        nn.LeakyReLU,
+        # nn.LeakyReLU,
         nn.SiLU,
         nn.Mish,
     ]

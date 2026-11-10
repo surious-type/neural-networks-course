@@ -35,12 +35,14 @@ def make_config(config):
             "two": layers[1],
             "out": 1,
         }
+        neurons = layers[0] + layers[1]
     else:
         model_params = {
             "input_size": 1,
             "one": layers,
             "out": 1,
         }
+        neurons = layers
 
     return {
         "model_params": str(model_params),
@@ -49,6 +51,7 @@ def make_config(config):
         "optimizer_class": optimizer_class,
         "epochs": epochs,
         "batch_size": batch_size,
+        "neurons": neurons,
     }
 
 
@@ -70,6 +73,7 @@ class Store:
     FIELDS = [
         "run_id",
         *CONFIG,
+        "neurons",
         *METRICS,
     ]
 
@@ -113,6 +117,6 @@ class Store:
         }
 
         with open(self.filename, "a") as f:
-            f.write(";".join(str(v) for v in record.values()) + "\n")
+            f.write(";".join(str(record[field]) for field in self.FIELDS) + "\n")
 
         self.ids.add(run_id)
